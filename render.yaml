@@ -10,15 +10,11 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11 # Match the Python version in your Dockerfile
-      # IMPORTANT: Define how API keys are retrieved from Render Secrets
-      - key: GROQ_API_KEY
-        fromSecretKeyRef:
-          name: lucknow-guide-secrets # Name of your Render Secret Group/File
-          key: GROQ_API_KEY # Key name within the Secret Group/File
-      - key: HUGGINGFACEHUB_API_TOKEN
-        fromSecretKeyRef:
-          name: lucknow-guide-secrets
-          key: HUGGINGFACEHUB_API_TOKEN
+      # CORRECTED SYNTAX for secrets from an Environment Group:
+      - key: GROQ_API_KEY          # Must exactly match the key name in your Render secrets
+        fromGroup: lucknow-guide-secrets # Specifies the Environment Group name
+      - key: HUGGINGFACEHUB_API_TOKEN # Must exactly match the key name in your Render secrets
+        fromGroup: lucknow-guide-secrets # Specifies the Environment Group name
     # Optional: Health check path for FastAPI
     healthCheckPath: /docs
     autoDeploy: yes # Redeploy automatically on pushes to the main branch
@@ -40,6 +36,19 @@ services:
         value: http://lucknow-guide-backend:8000/query
     autoDeploy: yes
 
-# NOTE: Render automatically assigns and exposes HTTP ports (80/443),
-# so you don't typically need to specify container ports here unless mapping non-standard ones.
-# The `EXPOSE` instruction in your Dockerfiles is sufficient.
+```
+
+**Key Changes:**
+
+* Removed the `fromSecretKeyRef` block.
+* Added `fromGroup: lucknow-guide-secrets` directly under the `key` for both `GROQ_API_KEY` and `HUGGINGFACEHUB_API_TOKEN`.
+
+**Next Steps:**
+
+1.  **Replace** the content of your `render.yaml` file with the corrected version above.
+2.  **Commit and Push** this change to your GitHub repository:
+    ```bash
+    git add render.yaml
+    git commit -m "Fix: Correct render.yaml syntax for secret environment variables"
+    git push origin main
+    
