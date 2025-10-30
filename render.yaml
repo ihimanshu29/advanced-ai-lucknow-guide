@@ -1,11 +1,12 @@
 # Define environment groups at the top level
 envVarGroups:
   - name: lucknow-guide-secrets # The name of the group you create in Render UI
-    # Define the expected keys here (optional but good practice for clarity)
-    # The actual values will be set in the Render UI
+    # Define the expected keys AND add placeholder values for the YAML validator
     envVars:
       - key: GROQ_API_KEY
+        value: "" # Placeholder value
       - key: HUGGINGFACEHUB_API_TOKEN
+        value: "" # Placeholder value
 
 services:
   # Backend Service (FastAPI)
@@ -16,7 +17,7 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile # Path relative to repo root
     dockerContext: ./backend # Build context directory
-    # Linkage to envVarGroups happens via Render UI / implicitly based on name match
+    # Render implicitly links the secrets based on the group name match
     # You can still define non-secret env vars directly
     envVars:
       - key: PYTHON_VERSION
