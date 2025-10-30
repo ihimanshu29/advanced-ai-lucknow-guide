@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend # Path to the backend Dockerfile directory
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # Map host port 8000 to container port 8000
+    env_file:
+      - ./backend/.env # Load environment variables from the .env file
+    volumes:
+      - ./backend:/app # Mount local code for development (optional, allows live reload)
+    networks:
+      - lucknow_guide_net
+
+  frontend:
+    build:
+      context: ./frontend # Path to the frontend Dockerfile directory
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501" # Map host port 8501 to container port 8501
+    environment:
+      # CRUCIAL: Tell the frontend how to reach the backend inside the Docker network
+      # The service name 'backend' acts as the hostname.
+      - BACKEND_URL=http://backend:8000/query
+    depends_on:
+      - backend # Ensure backend starts before frontend
+    volumes:
+      - ./frontend:/app # Mount local code for development (optional)
+    networks:
+      - lucknow_guide_net
+
+networks:
+  lucknow_guide_net:
+    driver: bridge

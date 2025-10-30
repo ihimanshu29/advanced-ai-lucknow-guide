@@ -1,0 +1,45 @@
+services:
+  # Backend Service (FastAPI)
+  - type: web
+    name: lucknow-guide-backend # Unique name for the backend service
+    env: python
+    plan: free # Use Render's free tier
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile # Path relative to repo root
+    dockerContext: ./backend # Build context directory
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11 # Match the Python version in your Dockerfile
+      # IMPORTANT: Define how API keys are retrieved from Render Secrets
+      - key: GROQ_API_KEY
+        fromSecretKeyRef:
+          name: lucknow-guide-secrets # Name of your Render Secret Group/File
+          key: GROQ_API_KEY # Key name within the Secret Group/File
+      - key: HUGGINGFACEHUB_API_TOKEN
+        fromSecretKeyRef:
+          name: lucknow-guide-secrets
+          key: HUGGINGFACEHUB_API_TOKEN
+    # Optional: Health check path for FastAPI
+    healthCheckPath: /docs
+    autoDeploy: yes # Redeploy automatically on pushes to the main branch
+
+  # Frontend Service (Streamlit)
+  - type: web
+    name: lucknow-guide-frontend # Unique name for the frontend service
+    env: python
+    plan: free
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile # Path relative to repo root
+    dockerContext: ./frontend
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      # CRUCIAL: Tell the frontend the internal URL of the backend service on Render
+      - key: BACKEND_URL
+        # Render automatically resolves 'lucknow-guide-backend' to the internal service address
+        value: http://lucknow-guide-backend:8000/query
+    autoDeploy: yes
+
+# NOTE: Render automatically assigns and exposes HTTP ports (80/443),
+# so you don't typically need to specify container ports here unless mapping non-standard ones.
+# The `EXPOSE` instruction in your Dockerfiles is sufficient.
