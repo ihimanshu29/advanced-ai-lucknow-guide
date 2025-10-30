@@ -16,9 +16,7 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile # Path relative to repo root
     dockerContext: ./backend # Build context directory
-    # Link the environment group defined above
-    envVarGroups:
-      - lucknow-guide-secrets # Just specify the group name
+    # Linkage to envVarGroups happens via Render UI / implicitly based on name match
     # You can still define non-secret env vars directly
     envVars:
       - key: PYTHON_VERSION
@@ -35,9 +33,6 @@ services:
     runtime: docker
     dockerfilePath: ./frontend/Dockerfile # Path relative to repo root
     dockerContext: ./frontend
-    # Link the environment group if needed (frontend doesn't need API keys here)
-    # envVarGroups:
-    #   - lucknow-guide-secrets
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
@@ -46,4 +41,3 @@ services:
         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
         value: http://lucknow-guide-backend:8000/query
     autoDeploy: yes
-
