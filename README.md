@@ -46,6 +46,7 @@ To ensure the reliability of the system, a comprehensive evaluation was performe
 ## 🏗️ System Architecture
 
 This project employs a modern, decoupled architecture, which is the industry standard for scalable web applications. The frontend is completely separate from the backend, communicating via a REST API.
+```bash
 
 +---------------------------+          +--------------------------------+
 |      Frontend (Client)    |          |        Backend (Server)        |
@@ -61,10 +62,10 @@ This project employs a modern, decoupled architecture, which is the industry sta
 |      (e.g., "Plan trip")  |          |                                |
 |                           |          |                                |
 |        Final Answer       | <------- |        Structured Response     |
-| (Formatted Itinerary) |          |                                |
+| (Formatted Itinerary)     |          |                                |
 |                           |          |                                |
 +---------------------------+          +--------------------------------+
-
+```
 ---
 
 ## 🛠️ Tech Stack
