@@ -31,7 +31,7 @@ def get_agent_executor():
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         splits = text_splitter.split_documents(documents)
         
-        embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+        embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
         
         vectorstore = Chroma.from_documents(documents=splits, embedding=embedding_model)
         retriever = vectorstore.as_retriever(search_kwargs={"k": 5})

@@ -55,7 +55,7 @@ st.set_page_config(page_title="Advanced AI Lucknow Tour Guide", page_icon="🗺�
 # Read the backend URL from the environment variable set by Docker Compose
 # Provide a default (http://127.0.0.1:8000/query) for running locally if the variable isn't set.
 BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000/query")
-
+# BACKEND_URL = "http://127.0.0.1:8000/query"
 # --- UI SETUP ---
 st.title("🗺️ Advanced AI Lucknow Tour Guide")
 st.caption("⚡ Powered by a FastAPI backend, Groq, and RAG")

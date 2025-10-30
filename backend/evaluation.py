@@ -35,7 +35,7 @@ def run_evaluation():
 
     # 2. Create vector store with Hugging Face embeddings
     print("2. Creating vector store...")
-    embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+    embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(documents)
     vectorstore = Chroma.from_documents(
