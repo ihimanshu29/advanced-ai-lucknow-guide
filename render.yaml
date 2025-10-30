@@ -35,20 +35,3 @@ services:
         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
         value: http://lucknow-guide-backend:8000/query
     autoDeploy: yes
-
-```
-
-**Key Changes:**
-
-* Removed the `fromSecretKeyRef` block.
-* Added `fromGroup: lucknow-guide-secrets` directly under the `key` for both `GROQ_API_KEY` and `HUGGINGFACEHUB_API_TOKEN`.
-
-**Next Steps:**
-
-1.  **Replace** the content of your `render.yaml` file with the corrected version above.
-2.  **Commit and Push** this change to your GitHub repository:
-    ```bash
-    git add render.yaml
-    git commit -m "Fix: Correct render.yaml syntax for secret environment variables"
-    git push origin main
-    
