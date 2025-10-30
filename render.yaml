@@ -1,13 +1,47 @@
-# Define environment groups at the top level
-envVarGroups:
-  - name: lucknow-guide-secrets # The name of the group you create in Render UI
-    # Define the expected keys AND add placeholder values for the YAML validator
-    envVars:
-      - key: GROQ_API_KEY
-        value: "" # Placeholder value
-      - key: HUGGINGFACEHUB_API_TOKEN
-        value: "" # Placeholder value
+# # Define environment groups at the top level
+# envVarGroups:
+#   - name: lucknow-guide-secrets # The name of the group you create in Render UI
+#     # Define the expected keys AND add placeholder values for the YAML validator
+#     envVars:
+#       - key: GROQ_API_KEY
+#         value: "" # Placeholder value
+#       - key: HUGGINGFACEHUB_API_TOKEN
+#         value: "" # Placeholder value
 
+# services:
+#   # Backend Service (FastAPI)
+#   - type: web
+#     name: lucknow-guide-backend # Unique name for the backend service
+#     env: python
+#     plan: free # Use Render's free tier
+#     runtime: docker
+#     dockerfilePath: ./backend/Dockerfile # Path relative to repo root
+#     dockerContext: ./backend # Build context directory
+#     # Render implicitly links the secrets based on the group name match
+#     # You can still define non-secret env vars directly
+#     envVars:
+#       - key: PYTHON_VERSION
+#         value: 3.11 # Match the Python version in your Dockerfile
+#     # Optional: Health check path for FastAPI
+#     healthCheckPath: /docs
+#     autoDeploy: yes # Redeploy automatically on pushes to the main branch
+
+#   # Frontend Service (Streamlit)
+#   - type: web
+#     name: lucknow-guide-frontend # Unique name for the frontend service
+#     env: python
+#     plan: free
+#     runtime: docker
+#     dockerfilePath: ./frontend/Dockerfile # Path relative to repo root
+#     dockerContext: ./frontend
+#     envVars:
+#       - key: PYTHON_VERSION
+#         value: 3.11
+#       # CRUCIAL: Tell the frontend the internal URL of the backend service on Render
+#       - key: BACKEND_URL
+#         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
+#         value: http://lucknow-guide-backend:8000/query
+#     autoDeploy: yes
 services:
   # Backend Service (FastAPI)
   - type: web
@@ -17,11 +51,11 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile # Path relative to repo root
     dockerContext: ./backend # Build context directory
-    # Render implicitly links the secrets based on the group name match
-    # You can still define non-secret env vars directly
     envVars:
       - key: PYTHON_VERSION
         value: 3.11 # Match the Python version in your Dockerfile
+      # THIS IS THE CORRECT, PERMANENT LINK:
+      - fromGroup: lucknow-guide-secrets # This links the group you created in the UI
     # Optional: Health check path for FastAPI
     healthCheckPath: /docs
     autoDeploy: yes # Redeploy automatically on pushes to the main branch
@@ -42,3 +76,5 @@ services:
         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
         value: http://lucknow-guide-backend:8000/query
     autoDeploy: yes
+
+
