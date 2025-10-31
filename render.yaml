@@ -74,5 +74,5 @@ services:
       # CRUCIAL: Tell the frontend the internal URL of the backend service on Render
       - key: BACKEND_URL
         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
-        value: https://www.google.com/search?q=https://lucknow-guide-backend.onrender.com/query
+        value: https://lucknow-guide-backend.onrender.com/query
     autoDeploy: yes
