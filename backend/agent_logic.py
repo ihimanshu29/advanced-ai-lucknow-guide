@@ -1,17 +1,24 @@
 import logging
+import os
 import requests
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.agents import AgentExecutor, create_tool_calling_agent
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_groq import ChatGroq
 from langchain.tools.retriever import create_retriever_tool
 from langchain.tools import Tool
 from langchain_community.document_loaders import TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from dotenv import load_dotenv
 
 # --- CONFIGURATION ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+load_dotenv()
+
+if os.getenv("HUGGINGFACEHUB_API_TOKEN"):
+    os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+
 
 def get_agent_executor():
     """
@@ -31,7 +38,18 @@ def get_agent_executor():
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         splits = text_splitter.split_documents(documents)
         
-        embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        # --- FIX: Use Hugging Face INFERENCE API to eliminate local model memory load ---
+        logging.info("Using Hugging Face Inference API (BAAI/bge-small-en-v1.5) to avoid OOM.")
+        # Assumes HUGGINGFACEHUB_API_TOKEN is set in the environment
+
+# ✅ Do NOT pass api_key manually
+        embedding_model = HuggingFaceEndpointEmbeddings(
+        model="BAAI/bge-small-en-v1.5"
+        )
+        # embedding_model = HuggingFaceEndpointEmbeddings(
+        #     api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN")
+        # )
+        
         
         vectorstore = Chroma.from_documents(documents=splits, embedding=embedding_model)
         retriever = vectorstore.as_retriever(search_kwargs={"k": 5})

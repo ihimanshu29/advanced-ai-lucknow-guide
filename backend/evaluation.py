@@ -1,12 +1,12 @@
 
+import logging
 import os
-
 import pandas as pd
 from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevancy, context_recall, context_precision
 from datasets import Dataset
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import Chroma
 from langchain_community.document_loaders import TextLoader
@@ -35,7 +35,12 @@ def run_evaluation():
 
     # 2. Create vector store with Hugging Face embeddings
     print("2. Creating vector store...")
-    embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    # --- FIX: Use Hugging Face INFERENCE API to eliminate local model memory load ---
+    logging.info("Using Hugging Face Inference API (BAAI/bge-small-en-v1.5) to avoid OOM.")
+    # Assumes HUGGINGFACEHUB_API_TOKEN is set in the environment
+    embedding_model = HuggingFaceEndpointEmbeddings(
+            model="BAAI/bge-small-en-v1.5"
+        )
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(documents)
     vectorstore = Chroma.from_documents(
@@ -46,7 +51,7 @@ def run_evaluation():
 
     # 3. Initialize LLM from Groq
     print("3. Initializing Groq LLM...")
-    llm = ChatGroq(model_name="gemma2-9b-it", temperature=0, max_retries=3)
+    llm = ChatGroq(model_name="meta-llama/llama-4-maverick-17b-128e-instruct", temperature=0, max_retries=3)
 
     # 4. Create QA Chain for testing
     qa_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
