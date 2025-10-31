@@ -58,7 +58,7 @@ services:
       - fromGroup: lucknow-guide-secrets # This links the group you created in the UI
     # Optional: Health check path for FastAPI
     healthCheckPath: /docs
-    autoDeploy: yes # Redeploy automatically on pushes to the main branch
+    autoDeploy: no # Redeploy automatically on pushes to the main branch
 
   # Frontend Service (Streamlit)
   - type: web
@@ -74,7 +74,5 @@ services:
       # CRUCIAL: Tell the frontend the internal URL of the backend service on Render
       - key: BACKEND_URL
         # Render automatically resolves 'lucknow-guide-backend' to the internal service address
-        value: http://lucknow-guide-backend:8000/query
+        value: https://www.google.com/search?q=https://lucknow-guide-backend.onrender.com/query
     autoDeploy: yes
-
-
