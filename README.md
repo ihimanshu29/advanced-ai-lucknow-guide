@@ -46,7 +46,10 @@ To ensure the reliability of the system, a comprehensive evaluation was performe
 ## 🏗️ System Architecture
 
 This project employs a modern, decoupled architecture, which is the industry standard for scalable web applications. The frontend is completely separate from the backend, communicating via a REST API.
+<img width="650" height="500" alt="image" src="https://github.com/user-attachments/assets/86cd8c36-54db-472a-b7a7-d19862ea8def" />
+
 ```bash
+
 
 +---------------------------+          +--------------------------------+
 |      Frontend (Client)    |          |        Backend (Server)        |
