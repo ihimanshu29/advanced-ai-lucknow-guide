@@ -2,7 +2,9 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python Version">
-  <img src="https://img.shields.io/badge/Deployment-Render-55FF9C.svg" alt="Deployed on Render">
+  <a href="https://lucknow-guide-frontend.onrender.com" target="_blank">
+    <img src="https://img.shields.io/badge/Deployment-Render-55FF9C.svg" alt="Deployed on Render">
+  </a>
   <img src="https://img.shields.io/badge/Framework-FastAPI%20%7C%20Streamlit-green.svg" alt="Framework">
   <img src="https://img.shields.io/badge/LLM-Groq%20(LLama--4)-orange.svg" alt="LLM">
   <img src="https://img.shields.io/badge/Architecture-Agentic%20RAG-purple.svg" alt="Architecture">
